@@ -58,26 +58,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Sets the current node to the first in the Game Managers node list.
-    /// Sets the current movement direction to the direction of the current node.
-    /// </summary>
-     
-    ///<findPathPsuedo>
-    ///private void FindPath()
-    ///{
-    ///access gmae manager
-    ///add nodes
-    ///add GameManager.Instance.Nodes[0] onto list of unsearched nodes
-    ///check if node = GameManager.Instacne.Player.TargetNode/CurrentNode
-    ///if same that is destination
-    ///else add children to list
-    ///remove checked node
-    ///assign most recently added node to checking
-    ///repeat from 72
-    ///} 
-    /// </findPathPsuedo>
-
     void InitializeAgent()
     {
         currentNode = GameManager.Instance.Nodes[0];
@@ -87,6 +67,10 @@ public class Enemy : MonoBehaviour
 
     //Implement DFS algorithm method here
 
+    void PathFinding()
+    {
+
+    }
 
     ///<pathfinder2>
     ///Variable for node being searched
