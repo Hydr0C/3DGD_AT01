@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     [Tooltip("Movement speed modifier.")]
     [SerializeField] private float speed = 3;
     private Node currentNode;
+    private Node beingSearched;
     private Vector3 currentDir;
     private bool playerCaught = false;
 
@@ -69,9 +70,10 @@ public class Enemy : MonoBehaviour
 
     void PathFinding()
     {
-
+        //pla
     }
 
+      
     ///<pathfinder2>
     ///Variable for node being searched
     ///Bool for target found

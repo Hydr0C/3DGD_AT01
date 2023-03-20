@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
     //Define delegate types and events here
+
 
     public Node CurrentNode { get; private set; }
     public Node TargetNode { get; private set; }
