@@ -1215,6 +1215,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  player: {fileID: 1220234473}
+  node: {fileID: 0}
 --- !u!135 &1059721680
 SphereCollider:
   m_ObjectHideFlags: 0

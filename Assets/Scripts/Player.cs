@@ -9,7 +9,6 @@ public class Player : MonoBehaviour
 {
     //Define delegate types and events here
 
-
     public Node CurrentNode { get; private set; }
     public Node TargetNode { get; private set; }
 
@@ -37,7 +36,6 @@ public class Player : MonoBehaviour
         if (moving == false)
         {
             //Implement inputs and event-callbacks here
-            //can move
             if (Input.GetButton("Horizontal"))
             {
                 Debug.Log("Horizontal");
