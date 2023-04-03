@@ -38,11 +38,25 @@ public class Player : MonoBehaviour
             //Implement inputs and event-callbacks here
             if (Input.GetButton("Horizontal"))
             {
-                Debug.Log("Horizontal");
+                if(Input.GetAxis("Horizontal") > 0)
+                {
+                    Debug.Log("Right");
+                }
+                if (Input.GetAxis("Horizontal") < 0)
+                {
+                    Debug.Log("Left");
+                }
             }
             if(Input.GetButton("Vertical"))
             {
-                Debug.Log("Vertical");
+                if (Input.GetAxis("Vertical") > 0)
+                {
+                    Debug.Log("Up");
+                }
+                if (Input.GetAxis("Vertical") < 0)
+                {
+                    Debug.Log("Down");
+                }
             }
         }
         else
@@ -79,5 +93,11 @@ public class Player : MonoBehaviour
             currentDir = currentDir.normalized;
             moving = true;
         }
+    }
+
+    private void FindNodes()
+    {
+        //RaycastHit hit;
+        //Node node;
     }
 }

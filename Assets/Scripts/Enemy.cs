@@ -43,12 +43,10 @@ public class Enemy : MonoBehaviour
                     if (safetyBreak == false)
                     {
                         safetyBreak = true;
-                        //PathFinding();
                         DFSearch();
 
                     }
                 }
-                
             }
             else
             {
@@ -84,13 +82,15 @@ public class Enemy : MonoBehaviour
 
     private void DFSearch()
     {
-        Debug.Log("Pathfinding has started");
+        //Debug.Log("Pathfinding has started");
+
+        //Set the required variables
         Node searchingNode;
-        
         bool targetFound;
         Node playerCurrent;
         Node playerTarget;
 
+        //Define the vraiables
         targetFound = false;
 
         searchingNode = GameManager.Instance.Nodes[0];
@@ -109,11 +109,11 @@ public class Enemy : MonoBehaviour
             // Ensure there are nodes in the list
             if (theStack.Count == 0)
             {
-                Debug.Log("No nodes in list");
+                //If none, break the loop
                 break;
             }
+            //Set the node being searched to the last node in the list
             searchingNode = theStack[theStack.Count() - 1];
-            Debug.Log(searchingNode.name);
 
             // Check if the current node being searched is the required node
             if (searchingNode == playerCurrent | playerTarget)
@@ -122,7 +122,6 @@ public class Enemy : MonoBehaviour
                 currentDir = currentNode.transform.position - transform.position;
                 currentDir = currentDir.normalized;
                 targetFound = true;
-                Debug.Log("Found Target. Target is: " + currentNode.name);
                 break;
             }
             else // Add the node's children to the list
@@ -133,66 +132,12 @@ public class Enemy : MonoBehaviour
                     foreach (Node child in children)
                     {
                         theStack.Add(child);
-                        Debug.Log("Added child");
                     }
                 }      
                 
             }
+            //Remove the searched node from the list
             theStack.Remove(searchingNode);
-        }
-    }
-
-    void PathFinding()
-    {
-        Debug.Log("Pathfinding has started");
-        // Create Variables
-        Node searchingNode;
-        bool targetFound;
-        Node playerCurrent;
-        Node playerTarget;
-
-        // Set Variables
-        searchingNode = GameManager.Instance.Nodes[0];
-        targetFound = false;
-        List<Node> theStack = new List<Node> {searchingNode};
-        List<Node> children = new List<Node> {};
-
-        playerCurrent = player.CurrentNode; 
-        playerTarget = player.TargetNode;
-       
-        // Create the Loop
-        while (targetFound == false)
-        {
-           
-
-            // Ensure there are nodes in the list
-            if (theStack.Count == 0)
-            {
-                Debug.Log("No nodes in list");
-                break;
-            }
-            searchingNode = theStack.Last();
-
-            // Check if the current node being searched is the required node
-            if (searchingNode == playerCurrent | playerTarget)
-            {
-                currentNode = searchingNode;
-                targetFound = true;
-                Debug.Log("Found Target. Target is: " + currentNode.name);
-            }
-            else // Add the node's children to the list
-            {
-                children.AddRange(searchingNode.Children);
-                foreach (Node child in children)
-                {
-                    theStack.Add(child);
-                    Debug.Log("Added child");
-                }
-                theStack.Remove(searchingNode);
-            }
-
-           
-
         }
     }
 
