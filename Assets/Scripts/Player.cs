@@ -16,6 +16,11 @@ public class Player : MonoBehaviour
     private bool moving = false;
     private Vector3 currentDir;
 
+    bool canGoFwd; 
+    bool canGoBkwd; 
+    bool canGoLeft; 
+    bool canGoRight; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,25 +40,27 @@ public class Player : MonoBehaviour
         MouseInput();
         if (moving == false)
         {
+            FindNodes();
             //Implement inputs and event-callbacks here
             if (Input.GetButton("Horizontal"))
             {
-                if(Input.GetAxis("Horizontal") > 0)
+                if(Input.GetAxis("Horizontal") > 0 && canGoRight)
                 {
                     Debug.Log("Right");
+                    MoveToNode(TargetNode);
                 }
-                if (Input.GetAxis("Horizontal") < 0)
+                if (Input.GetAxis("Horizontal") < 0 && canGoLeft)
                 {
                     Debug.Log("Left");
                 }
             }
             if(Input.GetButton("Vertical"))
             {
-                if (Input.GetAxis("Vertical") > 0)
+                if (Input.GetAxis("Vertical") > 0 && canGoFwd)
                 {
                     Debug.Log("Up");
                 }
-                if (Input.GetAxis("Vertical") < 0)
+                if (Input.GetAxis("Vertical") < 0 && canGoBkwd)
                 {
                     Debug.Log("Down");
                 }
@@ -99,5 +106,50 @@ public class Player : MonoBehaviour
     {
         //RaycastHit hit;
         //Node node;
+
+        Vector3 fwd = transform.TransformDirection(Vector3.forward);
+        Vector3 bkwd = transform.TransformDirection(Vector3.back);
+        Vector3 right = transform.TransformDirection(Vector3.right);
+        Vector3 left = transform.TransformDirection(Vector3.left);
+
+        if(Physics.Raycast(transform.position, fwd, 10))
+        {
+            Debug.Log("Thing infront");
+            canGoFwd = true;
+        }
+        else
+        {
+            canGoFwd = false;
+        }
+
+        if(Physics.Raycast(transform.position, bkwd, 10))
+        {
+            Debug.Log("Thing behind");
+            canGoBkwd = true;
+        }
+        else
+        {
+            canGoBkwd = false;
+        }
+
+        if (Physics.Raycast(transform.position, right, 10))
+        {
+            Debug.Log("Thing right");
+            canGoRight = true;
+        }
+        else
+        {
+            canGoRight = false;
+        }
+
+        if (Physics.Raycast(transform.position, left, 10))
+        {
+            Debug.Log("Thing left");
+            canGoLeft = true;
+        }
+        else
+        {
+            canGoLeft = false;
+        }
     }
 }
