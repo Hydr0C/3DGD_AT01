@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
 using UnityEngine;
+using System;
 
 public class Enemy : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class Enemy : MonoBehaviour
     public event GameEndDelegate GameOverEvent = delegate { };
 
 
-    private bool safetyBreak = false;
+    private float safetyBreak = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -40,11 +41,10 @@ public class Enemy : MonoBehaviour
                 }
                 else
                 {
-                    if (safetyBreak == false)
+                    if (safetyBreak >= 0f)
                     {
-                        safetyBreak = true;
-                        DFSearch();
-
+                        //safetyBreak = safetyBreak-1f;
+                       StartCoroutine(DFSearch());
                     }
                 }
             }
@@ -52,7 +52,6 @@ public class Enemy : MonoBehaviour
             {
                 Debug.LogWarning($"{name} - No current node");
             }
-
             Debug.DrawRay(transform.position, currentDir, Color.cyan);
         }
     }
@@ -80,10 +79,8 @@ public class Enemy : MonoBehaviour
 
     //Implement DFS algorithm method here
 
-    private void DFSearch()
+    private IEnumerator DFSearch()
     {
-        //Debug.Log("Pathfinding has started");
-
         //Set the required variables
         Node searchingNode;
         bool targetFound;
@@ -105,7 +102,6 @@ public class Enemy : MonoBehaviour
         // Create the Loop
         while (targetFound == false)
         {
-
             // Ensure there are nodes in the list
             if (theStack.Count == 0)
             {
@@ -116,7 +112,7 @@ public class Enemy : MonoBehaviour
             searchingNode = theStack[theStack.Count() - 1];
 
             // Check if the current node being searched is the required node
-            if (searchingNode == playerCurrent | playerTarget)
+            if (searchingNode == playerCurrent)
             {
                 currentNode = searchingNode;
                 currentDir = currentNode.transform.position - transform.position;
@@ -126,18 +122,20 @@ public class Enemy : MonoBehaviour
             }
             else // Add the node's children to the list
             {
+                //Debug.Log("Wrong Node");
                 if (searchingNode.Children.Count() > 0)
                 {
-                    children.AddRange(searchingNode.Children);
-                    foreach (Node child in children)
+                    //children.AddRange(searchingNode.Children);
+                    foreach (Node child in searchingNode.Children)
                     {
                         theStack.Add(child);
                     }
                 }      
-                
             }
             //Remove the searched node from the list
             theStack.Remove(searchingNode);
+
+            yield return null;
         }
     }
 

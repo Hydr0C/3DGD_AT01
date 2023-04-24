@@ -8,18 +8,12 @@ using UnityEngine.UIElements;
 public class Player : MonoBehaviour
 {
     //Define delegate types and events here
-
     public Node CurrentNode { get; private set; }
     public Node TargetNode { get; private set; }
 
     [SerializeField] private float speed = 4;
     private bool moving = false;
     private Vector3 currentDir;
-
-    bool canGoFwd; 
-    bool canGoBkwd; 
-    bool canGoLeft; 
-    bool canGoRight; 
 
     // Start is called before the first frame update
     void Start()
@@ -40,29 +34,31 @@ public class Player : MonoBehaviour
         MouseInput();
         if (moving == false)
         {
-            FindNodes();
+            
             //Implement inputs and event-callbacks here
             if (Input.GetButton("Horizontal"))
             {
-                if(Input.GetAxis("Horizontal") > 0 && canGoRight)
+                if(Input.GetAxis("Horizontal") > 0)
                 {
-                    Debug.Log("Right");
-                    MoveToNode(TargetNode);
+                    FindNodes(transform.right);
                 }
-                if (Input.GetAxis("Horizontal") < 0 && canGoLeft)
+                if (Input.GetAxis("Horizontal") < 0)
                 {
-                    Debug.Log("Left");
+                    FindNodes(-transform.right);
+                    
                 }
             }
             if(Input.GetButton("Vertical"))
             {
-                if (Input.GetAxis("Vertical") > 0 && canGoFwd)
+                if (Input.GetAxis("Vertical") > 0)
                 {
-                    Debug.Log("Up");
+                    FindNodes(transform.forward);
+                    //transform.eulerAngles = new Vector3(0f, 0f, 0f);
                 }
-                if (Input.GetAxis("Vertical") < 0 && canGoBkwd)
+                if (Input.GetAxis("Vertical") < 0)
                 {
-                    Debug.Log("Down");
+                    FindNodes(-transform.forward);
+                    //transform.eulerAngles = new Vector3(0f, 180f, 0f);
                 }
             }
         }
@@ -99,57 +95,23 @@ public class Player : MonoBehaviour
             currentDir = TargetNode.transform.position - transform.position;
             currentDir = currentDir.normalized;
             moving = true;
+
         }
     }
 
-    private void FindNodes()
+    private void FindNodes(Vector3 dir)
     {
-        //RaycastHit hit;
-        //Node node;
+        RaycastHit hit;
 
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        Vector3 bkwd = transform.TransformDirection(Vector3.back);
-        Vector3 right = transform.TransformDirection(Vector3.right);
-        Vector3 left = transform.TransformDirection(Vector3.left);
+        Ray ray = new Ray(transform.position, transform.TransformDirection(dir));
 
-        if(Physics.Raycast(transform.position, fwd, 10))
+        if(Physics.Raycast(ray, out hit, 10))
         {
-            Debug.Log("Thing infront");
-            canGoFwd = true;
-        }
-        else
-        {
-            canGoFwd = false;
-        }
-
-        if(Physics.Raycast(transform.position, bkwd, 10))
-        {
-            Debug.Log("Thing behind");
-            canGoBkwd = true;
-        }
-        else
-        {
-            canGoBkwd = false;
-        }
-
-        if (Physics.Raycast(transform.position, right, 10))
-        {
-            Debug.Log("Thing right");
-            canGoRight = true;
-        }
-        else
-        {
-            canGoRight = false;
-        }
-
-        if (Physics.Raycast(transform.position, left, 10))
-        {
-            Debug.Log("Thing left");
-            canGoLeft = true;
-        }
-        else
-        {
-            canGoLeft = false;
+            if(hit.collider.gameObject.TryGetComponent<Node>(out Node node))
+            {
+                TargetNode = node;
+                MoveToNode(TargetNode);
+            }
         }
     }
 }

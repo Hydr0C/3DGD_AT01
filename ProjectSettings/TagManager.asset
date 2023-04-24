@@ -4,7 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Button
+  - Up
+  - Down
+  - Left
+  - Right
   layers:
   - Default
   - TransparentFX
