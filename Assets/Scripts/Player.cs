@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public Node TargetNode { get; private set; }
 
     [SerializeField] private float speed = 4;
-    private bool moving = false;
+    public bool moving = false;
     private Vector3 currentDir;
 
     // Start is called before the first frame update
@@ -31,10 +31,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseInput();
         if (moving == false)
         {
-            
             //Implement inputs and event-callbacks here
             if (Input.GetButton("Horizontal"))
             {
@@ -53,12 +51,10 @@ public class Player : MonoBehaviour
                 if (Input.GetAxis("Vertical") > 0)
                 {
                     FindNodes(transform.forward);
-                    //transform.eulerAngles = new Vector3(0f, 0f, 0f);
                 }
                 if (Input.GetAxis("Vertical") < 0)
                 {
                     FindNodes(-transform.forward);
-                    //transform.eulerAngles = new Vector3(0f, 180f, 0f);
                 }
             }
         }
@@ -76,18 +72,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    //Implement mouse interaction method here
-    public void MouseInput()
-    {
-        // if object in UI is tagged button
-        
-    }
-
     /// <summary>
     /// Sets the players target node and current directon to the specified node.
     /// </summary>
     /// <param name="node"></param>
-    public void MoveToNode(Node node)
+    public void MoveToNode(Node node) 
     {
         if (moving == false)
         {
@@ -95,22 +84,21 @@ public class Player : MonoBehaviour
             currentDir = TargetNode.transform.position - transform.position;
             currentDir = currentDir.normalized;
             moving = true;
-
         }
     }
 
-    private void FindNodes(Vector3 dir)
+    public void FindNodes(Vector3 dir) //Takes in a variable that determines what direction everything will go
     {
+        //Define the raycast
         RaycastHit hit;
-
         Ray ray = new Ray(transform.position, transform.TransformDirection(dir));
 
-        if(Physics.Raycast(ray, out hit, 10))
+        if(Physics.Raycast(ray, out hit, 10)) //Checks if the raycast hit something within 10 units
         {
-            if(hit.collider.gameObject.TryGetComponent<Node>(out Node node))
+            if(hit.collider.gameObject.TryGetComponent<Node>(out Node node)) //Checks if the thing hit was a node
             {
-                TargetNode = node;
-                MoveToNode(TargetNode);
+                TargetNode = node; //Sets the target to the node the raycast hit
+                MoveToNode(TargetNode); //starts the MoveToNode function
             }
         }
     }
