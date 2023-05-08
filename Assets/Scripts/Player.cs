@@ -8,6 +8,10 @@ using UnityEngine.UIElements;
 public class Player : MonoBehaviour
 {
     //Define delegate types and events here
+
+    public Buttons up, down, left, right;
+    
+
     public Node CurrentNode { get; private set; }
     public Node TargetNode { get; private set; }
 
@@ -38,10 +42,12 @@ public class Player : MonoBehaviour
             {
                 if(Input.GetAxis("Horizontal") > 0)
                 {
+                    StartCoroutine(right.Green());
                     FindNodes(transform.right);
                 }
                 if (Input.GetAxis("Horizontal") < 0)
                 {
+                    StartCoroutine(left.Green());
                     FindNodes(-transform.right);
                     
                 }
@@ -50,10 +56,12 @@ public class Player : MonoBehaviour
             {
                 if (Input.GetAxis("Vertical") > 0)
                 {
+                    StartCoroutine(up.Green());
                     FindNodes(transform.forward);
                 }
                 if (Input.GetAxis("Vertical") < 0)
                 {
+                    StartCoroutine(down.Green());
                     FindNodes(-transform.forward);
                 }
             }

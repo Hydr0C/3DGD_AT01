@@ -1596,6 +1596,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97d09ec131940f459b8aecbbf36557a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  up: {fileID: 35748947}
+  down: {fileID: 1989877981}
+  left: {fileID: 106166872}
+  right: {fileID: 1037748371}
   speed: 4
   moving: 0
 --- !u!135 &1220234474

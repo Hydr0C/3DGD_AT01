@@ -79,7 +79,7 @@ public class Buttons : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    IEnumerator Green()
+    public IEnumerator Green()
     {
         thisImage.color = Color.green;
 
