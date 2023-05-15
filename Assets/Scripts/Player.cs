@@ -4,9 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    private AT01_UnityProjectActions _input;
+
+    private Vector2 inputDirections;
+    
     //Define delegate types and events here
 
     public Buttons up, down, left, right;
@@ -19,6 +24,17 @@ public class Player : MonoBehaviour
     public bool moving = false;
     private Vector3 currentDir;
 
+    private void OnEnable()
+    {
+        if (_input == null)
+        {
+            _input = new AT01_UnityProjectActions();
+            _input.Player.Move.performed += _input => inputDirections = _input.ReadValue<Vector2>();
+            //_input.Player.Move.performed += SetDirection;
+        }
+        _input.Player.Enable();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,43 +46,16 @@ public class Player : MonoBehaviour
                 break;
             }
         }
+
+       
+
+        //_input.Player.Move.performed += SetDirection;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (moving == false)
-        {
-            //Implement inputs and event-callbacks here
-            if (Input.GetButton("Horizontal"))
-            {
-                if(Input.GetAxis("Horizontal") > 0)
-                {
-                    StartCoroutine(right.Green());
-                    FindNodes(transform.right);
-                }
-                if (Input.GetAxis("Horizontal") < 0)
-                {
-                    StartCoroutine(left.Green());
-                    FindNodes(-transform.right);
-                    
-                }
-            }
-            if(Input.GetButton("Vertical"))
-            {
-                if (Input.GetAxis("Vertical") > 0)
-                {
-                    StartCoroutine(up.Green());
-                    FindNodes(transform.forward);
-                }
-                if (Input.GetAxis("Vertical") < 0)
-                {
-                    StartCoroutine(down.Green());
-                    FindNodes(-transform.forward);
-                }
-            }
-        }
-        else
+        if (moving)
         {
             if (Vector3.Distance(transform.position, TargetNode.transform.position) > 0.25f)
             {
@@ -78,6 +67,45 @@ public class Player : MonoBehaviour
                 CurrentNode = TargetNode;
             }
         }
+        else if(!moving)
+        {
+            //Debug.Log("not moving");
+             SetDirection();
+        }
+       
+    }
+
+    private void SetDirection()
+    {
+
+        Debug.Log("Dir is set");
+        float xDir = inputDirections.x;
+        float yDir = inputDirections.y;
+        if (!moving)
+        {
+            if (yDir > 0)
+            {
+                StartCoroutine(up.Green());
+                FindNodes(transform.forward);
+            }
+            if (yDir < 0)
+            {
+                StartCoroutine(down.Green());
+                FindNodes(-transform.forward);
+            }
+            if (xDir > 0)
+            {
+                StartCoroutine(right.Green());
+                FindNodes(transform.right);
+            }
+            if (xDir < 0)
+            {
+                StartCoroutine(left.Green());
+                FindNodes(-transform.right);
+
+            }
+        }
+
     }
 
     /// <summary>
@@ -109,5 +137,10 @@ public class Player : MonoBehaviour
                 MoveToNode(TargetNode); //starts the MoveToNode function
             }
         }
+    }
+
+    private void OnDisable()
+    {
+        _input.Player.Disable();
     }
 }
